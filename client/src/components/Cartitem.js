@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import {  Card, CardActions, CardContent, CardMedia, Typography } from '@mui/material'
 import { Button } from '@mui/base'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { remove } from '../redux/slices/cartSlice'
+import { popprice } from '../redux/slices/priceSlice'
 
 export default function Cartitem(props) {
   const buttonA = {
@@ -25,9 +26,11 @@ export default function Cartitem(props) {
   }
   const [url] = useState("..\\\\images\\" + props.item.pic.split("images")[1]);
   const dispatch = useDispatch();
+ 
   const removeFromCart = () => {
   
     dispatch(remove(props.item._id));
+    dispatch(popprice());
   }
   
   
@@ -51,7 +54,7 @@ export default function Cartitem(props) {
 
       </CardContent>
       <CardActions style={{ padding: "20px" }}>
-        <Typography>${props.item.price}</Typography>
+      
         <Button size="small" style={buttonA} onClick={removeFromCart}>
           remove
         </Button>
