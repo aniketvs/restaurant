@@ -1,14 +1,13 @@
 const mongoose=require('mongoose');
 const Schema=mongoose.Schema;
-const options=new Schema({
-    opt:{
-        type:String,
-        required:true
-    },
-    price:{
-        type:Number,
-        required:true
-    }
+
+const extras=new Schema({
+     item:{
+        type:String
+     },
+     extramoney:{
+        type:Number
+     }
 })
 const foodpostmodal=new Schema({
     types:{
@@ -19,6 +18,9 @@ const foodpostmodal=new Schema({
         type:String,
         required:true
     },
+    price:{
+        type:Number
+    },
     description:{
         type:String,
         required:true
@@ -27,7 +29,8 @@ const foodpostmodal=new Schema({
         type:String,
         required:true
     },
-    option:[options]
+    option:[],
+    extra:[extras]
    
 
 })

@@ -1,12 +1,14 @@
 import { Box } from '@mui/system';
 import React, { useEffect, useState } from 'react'
 import FoodCart from './FoodCart';
-import { Button, Grid, TextField, Typography } from '@mui/material'
+import { Button, Grid, TextField } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search';
 import InputAdornment from '@mui/material/InputAdornment';
+import {HashLink as Link} from 'react-router-hash-link'
 export default function Home(props) {
-
   const [food, setfood] = useState([]);
+  const [value,setvalue]=useState("");
+  console.warn(food.length);
   useEffect(() => {
     getfood();
   }, [])
@@ -14,26 +16,28 @@ export default function Home(props) {
     let result;
     if (val) {
       result = await fetch(`http://localhost:5000/get/food/${val}`);
-    } else {
-      result = await fetch('http://localhost:5000/get/food/');
     }
-
     result = await result.json();
 
     setfood(result);
 
   }
-  const filterresult = (val) => {
-    getfood(val)
-  }
+
+const filterresult=(val)=>{
+  setvalue(val);
+  getfood(val);
+ 
+  
+}
+  
   return (
     <>
 
       <Box style={{ margin: "5rem" }}>
 
         <Grid container spacing={4}>
-          <Grid item xs={4}>
-            <Box style={{ margin: '1rem' ,display:'flex',flexDirection:"column",justifyContent:'center'}}>
+          <Grid item xs={12}>
+            <Box style={{ margin: '1rem' ,display:'flex',flexDirection:"raw",justifyContent:'center'}}>
               <TextField
                 label="Search"
                 id="outlined-start-adornment"
@@ -42,29 +46,28 @@ export default function Home(props) {
                 }}
                 onChange={(e) => filterresult(e.target.value)}
               />
-              <Box style={{display:'flex',flexDirection:"column",justifyContent:'center',marginTop:'2rem'}}>
-                <Button value="pizza" style={{fontSize:"16px"}} onClick={(e) => filterresult(e.target.value)}>Pizza</Button>
-                <Button value="briyani" style={{fontSize:"16px"}} onClick={(e) => filterresult(e.target.value)}>Briyani</Button>
-                <Button value="burger"  style={{fontSize:"16px"}} onClick={(e) => filterresult(e.target.value)}>Burger</Button>
+              <Box style={{display:'flex',flexDirection:"raw",justifyContent:'center'}}>
+                <Button value="pizza" style={{fontSize:"16px"}} ><Link to='#pizza' style={{textDecoration:'none',color:'black'}}>Pizza</Link></Button>
+                <Button value="briyani" style={{fontSize:"16px"}} ><Link to='#briyani' style={{textDecoration:'none',color:'black'}}>Briyani</Link></Button>
+                <Button value="burger"  style={{fontSize:"16px"}} ><Link to='#desert' style={{textDecoration:'none',color:'black'}}>Desert</Link></Button>
               </Box>
 
 
             </Box>
           </Grid>
-          {food.length > 0 ?
-            food.map((item) => {
-              return (
-                <Grid item xs={4}>
-                  <FoodCart key={item.id} item={item} counter={props.counter} setcounter={props.setcounter} />
-                </Grid>
-              )
-            })
-            :
-            <Grid item xs={8}>
-            <Box>
-              <h4 style={{ textAlign: "center" }}>No Food Is Available</h4>
-            </Box>
-           </Grid>
+          {
+            food.length > 0 ?
+            
+              <FoodCart item={props.item} val={value}/> 
+            
+
+          :
+            
+          <>
+           <FoodCart item={props.item} val='pizza' />
+           <FoodCart item={props.item} val='briyani' />
+           <FoodCart item={props.item} val='desert' />
+           </>
           }
 
         </Grid>
